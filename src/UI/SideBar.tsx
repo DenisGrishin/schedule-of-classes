@@ -5,18 +5,18 @@ import HomeIcon from '../img/icon/homeIcon.svg?react';
 import WalletIcon from '../img/icon/walletIcon.svg?react';
 
 interface propListLink {
-  icon: any;
+  icon: React.SVGProps<SVGSVGElement>;
   text: string;
   link: string;
 }
 
 export const SideBar: React.FC = () => {
-  const [isActive, setIsActive] = useState(0);
+  const [positionRow, setPositionRow] = useState(0);
   const [isIndxLink, setIndxLink] = useState(0);
 
-  const qw = (indx: number = 0) => {
+  const getPositionRow = (indx: number = 0) => {
     const sum = (100 / linkList.length).toFixed();
-    setIsActive(+sum * indx);
+    setPositionRow(+sum * indx);
     setIndxLink(indx);
   };
 
@@ -31,29 +31,30 @@ export const SideBar: React.FC = () => {
       text: 'Расписание',
       link: 'schedule',
     },
-    // {
-    //   icon: <WalletIcon className={isIndxLink === 2 ? 'active-stroke' : ''} />,
-    //   text: 'sda',
-    //   link: 'aaa',
-    // },
   ];
   return (
     <aside className="h-full flex-[0_0_236px]">
-      <div className="rounded-[30px] bg-lightPurple h-full p-11 pr-5">
+      <div className="rounded-[30px] bg-lightPurple h-full py-11 pr-5 ">
         <Link to="">
-          <LogoIcon />
+          <LogoIcon className="pl-11" />
         </Link>
-        <nav className="mt-12 relative">
-          <ul
-            className={`before:content-[''] before:top-${2}  before:transition-all  before:absolute before:h-10 before:bg-purple before:w-full`}
-          >
+        <nav className="mt-12">
+          <ul className="relative">
+            <li
+              style={{ top: `${positionRow}%` }}
+              className={`   transition-all w-full rounded-r-[30px]   absolute h-10 bg-purple before:w-full`}
+            ></li>
             {linkList.map((el, indx) => (
-              <li onClick={() => qw(indx)} key={indx} className="py-2">
+              <li
+                onClick={() => getPositionRow(indx)}
+                key={indx}
+                className="flex items-center h-10 pl-11"
+              >
                 <Link
                   to={el.link}
                   className={`${
                     indx === isIndxLink ? 'text-white' : ''
-                  } flex relative z-10 items-center gap-2.5`}
+                  } flex relative z-10 items-center  gap-2.5`}
                 >
                   {el.icon}
                   <span className="leading-4">{el.text}</span>

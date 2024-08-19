@@ -13,3 +13,6 @@ body {
   font-family: 'Fira Sans';
   @apply text-textMain;
 }
+* {
+  box-sizing: content-box;
+}
