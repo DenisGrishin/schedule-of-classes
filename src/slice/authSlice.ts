@@ -19,19 +19,18 @@ export const authSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    login: (state) => {
+    isLogin: (state) => {
    
       state.isAuth = true
     },
-    logOut:(state)=>{
+    isLogOut:(state)=>{
       state.isAuth = false
-
     }
 
   },
 })
 
-export const {login,logOut } = authSlice.actions
+export const { isLogin,isLogOut } = authSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCount = (state: RootState) => state.auth.value

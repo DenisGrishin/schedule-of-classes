@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInUser } from '../firebase';
 import { startSession } from '../session';
 import { useAppDispatch } from '../hooks/hooks';
-import { login } from '../slice/authSlice';
+import { isLogin } from '../slice/authSlice';
 export const Login = () => {
   const navigate = useNavigate();
 
@@ -29,9 +29,9 @@ export const Login = () => {
     try {
       const loginResponse = await signInUser(email, password);
       startSession(loginResponse.user);
-      navigate('/');
+      navigate('/home');
 
-      dispatch(login());
+      dispatch(isLogin());
     } catch (error) {
       console.error(error.message);
       setError(error.message);

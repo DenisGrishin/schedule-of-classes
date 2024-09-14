@@ -5,8 +5,9 @@ import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import MessagesChat from '../img/icon/MessagesChat.svg';
 import { useNavigate } from 'react-router-dom';
 import { endSession } from './../session';
-import { logOut } from '../slice/authSlice';
+
 import Ava from '../img/avatar.png';
+import { isLogOut } from '../slice/authSlice';
 export const TopBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export const TopBar = () => {
   const onLogout = () => {
     endSession();
     navigate('/login');
-    dispatch(logOut());
+    dispatch(isLogOut());
   };
   return (
     <GridFlex justifyContent="justify-end gap-3 pr-16 py-4 border border-solid border-[#F6F6FE] rounded-[0px_0px_20px_20px]">

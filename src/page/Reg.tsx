@@ -68,7 +68,7 @@ export const Reg = () => {
             onChange={(e) => setRepeatPassword(e.target.value)}
             required
             type="password"
-            placeholder="Пароль"
+            placeholder="Пароль ещё раз"
             className=" border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3 mb-8 "
           />
           <button

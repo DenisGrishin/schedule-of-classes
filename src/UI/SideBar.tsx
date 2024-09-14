@@ -24,7 +24,7 @@ export const SideBar: React.FC = () => {
     {
       icon: <HomeIcon className={isIndxLink === 0 ? 'active-fill' : ''} />,
       text: 'Главная',
-      link: '',
+      link: 'home',
     },
     {
       icon: <WalletIcon className={isIndxLink === 1 ? 'active-stroke' : ''} />,
@@ -35,7 +35,7 @@ export const SideBar: React.FC = () => {
   return (
     <aside className="h-full flex-[0_0_236px]">
       <div className="rounded-[30px] bg-lightPurple h-full py-11 pr-5 ">
-        <Link to="">
+        <Link to="/home">
           <LogoIcon className="pl-11" />
         </Link>
         <nav className="mt-12">
