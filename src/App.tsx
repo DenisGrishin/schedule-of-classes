@@ -2,17 +2,31 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { getDataBaseFB, getRefFB, getValueFB } from './firebase';
 import { useRoutes } from './hooks/useRoutes';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
   const routes = useRoutes();
   const [data, setData] = useState();
 
+  const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   debugger;
+  //   if (user) {
+  //     console.log(user);
+
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/auth.user
+  //     const uid = user.uid;
+  //     // ...
+  //   } else {
+  //     console.log('нет юзера');
+  //   }
+  // });
   useEffect(() => {
     // Инициализируйте базу данных Firebase с предоставленной конфигурацией
     const database = getDataBaseFB();
 
     // Ссылка на конкретную коллекцию в базе данных
-
     const collectionRef = getRefFB(database, 'your_collection');
 
     // Функция для извлечения данных из базы данных
@@ -41,5 +55,3 @@ function App() {
 }
 
 export default App;
-// https://react-firebase-auth-db3b9-default-rtdb.europe-west1.firebasedatabase.app
-// https://react-firebase-auth-db3b9-default-rtdb.firebaseio.com/

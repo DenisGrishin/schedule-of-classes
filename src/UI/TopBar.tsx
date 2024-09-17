@@ -8,6 +8,7 @@ import { endSession } from './../session';
 
 import Ava from '../img/avatar.png';
 import { isLogOut } from '../slice/authSlice';
+import { signOutUser } from './../firebase';
 export const TopBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ export const TopBar = () => {
   });
 
   const onLogout = () => {
+    signOutUser();
     endSession();
     navigate('/login');
     dispatch(isLogOut());

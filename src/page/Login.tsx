@@ -30,7 +30,6 @@ export const Login = () => {
       const loginResponse = await signInUser(email, password);
       startSession(loginResponse.user);
       navigate('/home');
-
       dispatch(isLogin());
     } catch (error) {
       console.error(error.message);

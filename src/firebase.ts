@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   getAuth,
+  signOut
 } from 'firebase/auth';
 import { getDatabase, ref, onValue} from  "firebase/database" ;
 // Import the functions you need from the SDKs you need
@@ -24,16 +25,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Регестрация приложения
 export const createUser = async (email:string, password:string) => {
-  return createUserWithEmailAndPassword(getAuth(app), email, password);
+  return  createUserWithEmailAndPassword(getAuth(app), email, password);
 };
 // Вход в приложения
 export const signInUser = async (email:string, password:string) => {
-  return signInWithEmailAndPassword(getAuth(app), email, password);
+  return  signInWithEmailAndPassword(getAuth(app), email, password);
 };
 
+// выход из приложения 
+export const signOutUser = async ()=> await  signOut(getAuth(app))
 
-export const getDataBaseFB = ()=> getDatabase(app)
-
+ // Инициализируйте базу данных Firebase с предоставленной конфигурацией
+export const getDataBaseFB = ()=>  getDatabase(app)
+ // Ссылка на конкретную коллекцию в базе данных
 export const getRefFB = (database:any,name:string)=> ref(database,name)
-
+// дотсаем данные по ссылке getRefFB
 export const getValueFB = (collectionRef:any,callBack:any)=> onValue(collectionRef,callBack)

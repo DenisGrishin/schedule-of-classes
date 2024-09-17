@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
 import { GridFlex } from './../UI/GridFlex';
-import { createUser } from '../firebase';
+import { createUser, signInUser } from '../firebase';
 import { startSession } from '../session';
 import { useNavigate } from 'react-router-dom';
+import { EventFor } from '../otherFunction/otherFunction';
+import { isLogin } from '../slice/authSlice';
+import { useAppDispatch } from '../hooks/hooks';
 
 export const Reg = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [error, setError] = useState('');
@@ -13,7 +17,7 @@ export const Reg = () => {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: EventFor<'form', 'onSubmit'>) => {
     event.preventDefault();
 
     // validate the inputs
@@ -31,9 +35,12 @@ export const Reg = () => {
     try {
       const registerResponse = await createUser(email, password);
       startSession(registerResponse.user);
-      navigate('/');
+      await signInUser(email, password);
+      navigate('/home');
+      dispatch(isLogin());
     } catch (error: unknown) {
       console.error(error.message);
+
       setError(error.message);
     }
     // TODO: send the register request
@@ -43,10 +50,10 @@ export const Reg = () => {
     <GridFlex alignItems="items-center" justifyContent="justify-center">
       <div className=" text-center">
         <LogoNoText className="w-full mb-8" />
-        <div className="text-4xl mb-4 font-bold">
+        <div className="text-4xl mb-4 font-bold ">
           Регистарция в Sirius Future
         </div>
-        <form onSubmit={onSubmit} className="flex flex-col">
+        <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -78,6 +85,13 @@ export const Reg = () => {
             Зарегистрироваться
           </button>
         </form>
+        <button
+          className="text-blue"
+          type="button"
+          onClick={() => navigate('/login')}
+        >
+          Войти
+        </button>
       </div>
     </GridFlex>
   );
