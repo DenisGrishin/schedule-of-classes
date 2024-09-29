@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import MessagesChat from '../img/icon/MessagesChat.svg';
 import { useNavigate } from 'react-router-dom';
 import { endSession } from './../session';
-
 import Ava from '../img/avatar.png';
-import { isLogOut } from '../slice/authSlice';
-import { signOutUser } from './../firebase';
+
+import { isLogOut } from '../store/slice/authSlice';
+import { singOutFB } from '../API/api';
+
 export const TopBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -17,10 +18,12 @@ export const TopBar = () => {
   });
 
   const onLogout = () => {
-    signOutUser();
-    endSession();
-    navigate('/login');
-    dispatch(isLogOut());
+    singOutFB()
+      .then(() => {
+        navigate('/login');
+        dispatch(isLogOut());
+      })
+      .catch((error) => console.error(error.message));
   };
   return (
     <GridFlex justifyContent="justify-end gap-3 pr-16 py-4 border border-solid border-[#F6F6FE] rounded-[0px_0px_20px_20px]">

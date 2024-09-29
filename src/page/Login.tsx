@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
 import { GridFlex } from '../UI/GridFlex';
 import { useNavigate } from 'react-router-dom';
-import { signInUser } from '../firebase';
-import { startSession } from '../session';
 import { useAppDispatch } from '../hooks/hooks';
-import { isLogin } from '../slice/authSlice';
+import { EventFor } from '../otherFunction/otherFunction';
+import { isLogin } from '../store/slice/authSlice';
+import { signInUserAPI } from '../API/api';
+
 export const Login = () => {
   const navigate = useNavigate();
 
@@ -14,7 +15,7 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: EventFor<'form', 'onSubmit'>) => {
     event.preventDefault();
 
     // validate the inputs
@@ -26,18 +27,25 @@ export const Login = () => {
     // clear the errors
     setError('');
 
-    try {
-      const loginResponse = await signInUser(email, password);
-      startSession(loginResponse.user);
-      navigate('/home');
-      dispatch(isLogin());
-    } catch (error) {
-      console.error(error.message);
-      setError(error.message);
-    }
+    signInUserAPI(email, password)
+      .then(() => {
+        navigate('/home');
+        dispatch(isLogin());
+      })
+      .catch((error) => console.error(error.message));
+
+    // onAuthStateChanged(authFB, (user) => {
+    //   if (user) {
+    //     const uid = user.uid;
+    //     // ...
+    //   } else {
+    //     console.log('нет юзера');
+    //   }
+
     // TODO: send the login request
     console.log('Logging in...');
   };
+
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
       <div className=" text-center">

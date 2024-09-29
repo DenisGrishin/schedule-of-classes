@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from './hooks';
 import { getSession } from '../session';
-import { isLogin } from '../slice/authSlice';
+import { isLogin } from '../store/slice/authSlice';
 
 export const useAuth = () => {
   const isAuth = useAppSelector((state) => {

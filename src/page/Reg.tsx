@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
 import { GridFlex } from './../UI/GridFlex';
-import { createUser, signInUser } from '../firebase';
-import { startSession } from '../session';
 import { useNavigate } from 'react-router-dom';
 import { EventFor } from '../otherFunction/otherFunction';
-import { isLogin } from '../slice/authSlice';
 import { useAppDispatch } from '../hooks/hooks';
+import { isLogin } from '../store/slice/authSlice';
+import { createUserAPI } from '../API/api';
 
 export const Reg = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +20,7 @@ export const Reg = () => {
     event.preventDefault();
 
     // validate the inputs
+
     if (!email || !password || !repeatPassword) {
       setError('Please fill out all the fields.');
       return;
@@ -32,20 +32,24 @@ export const Reg = () => {
 
     // clear the errors
     setError('');
-    try {
-      const registerResponse = await createUser(email, password);
-      startSession(registerResponse.user);
-      await signInUser(email, password);
-      navigate('/home');
-      dispatch(isLogin());
-    } catch (error: unknown) {
-      console.error(error.message);
 
-      setError(error.message);
-    }
-    // TODO: send the register request
+    createUserAPI(email, password)
+      .then(() => {
+        navigate('/home');
+        dispatch(isLogin());
+      })
+      .catch((error) => console.error(error.message));
+
     console.log('Registering...');
   };
+
+  // function writeUserData(userId, name, email, imageUrl) {
+  //   const db = getDataBaseFB();
+  //   set(ref(db, 'users/' + userId), {
+  //     username: name,
+  //     email: email,
+  //   });
+  // }
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
       <div className=" text-center">
