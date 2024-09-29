@@ -1,55 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
 import { GridFlex } from './../UI/GridFlex';
 import { useNavigate } from 'react-router-dom';
 import { EventFor } from '../otherFunction/otherFunction';
 import { useAppDispatch } from '../hooks/hooks';
 import { isLogin } from '../store/slice/authSlice';
-import { createUserAPI } from '../API/api';
+import { createUserAPI, writeUserDataAPI } from '../API/api';
+import { useBoolean } from '../hooks/useBoolean';
 
 export const Reg = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
+  const { value: valueBoolean, setTrue, setFalse } = useBoolean();
+
+  const [userDataRegister, setUserDataRegister] = useState({
+    email: '',
+    password: '',
+    repeatPassword: '',
+  });
 
   const onSubmit = async (event: EventFor<'form', 'onSubmit'>) => {
     event.preventDefault();
 
     // validate the inputs
 
-    if (!email || !password || !repeatPassword) {
-      setError('Please fill out all the fields.');
+    if (
+      !userDataRegister.email ||
+      !userDataRegister.password ||
+      !userDataRegister.repeatPassword
+    ) {
+      setError('Заполните все поля');
+      setTrue();
       return;
     }
-    if (password !== repeatPassword) {
-      setError('Passwords do not match');
+    if (userDataRegister.password !== userDataRegister.repeatPassword) {
+      setError('Пароль должен совпадать');
+      setTrue();
+      setUserDataRegister({
+        ...userDataRegister,
+        password: '',
+        repeatPassword: '',
+      });
       return;
     }
 
-    // clear the errors
-    setError('');
-
-    createUserAPI(email, password)
+    createUserAPI(userDataRegister.email, userDataRegister.password)
       .then(() => {
+        setError('');
+        setFalse();
         navigate('/home');
         dispatch(isLogin());
       })
-      .catch((error) => console.error(error.message));
-
-    console.log('Registering...');
+      .catch((error) => {
+        setTrue();
+        setError(error.message);
+        if ('Firebase: Error (auth/email-already-in-use).' === error.message) {
+          setError('Этот адрес электронной почты уже используется');
+        }
+      });
   };
 
-  // function writeUserData(userId, name, email, imageUrl) {
-  //   const db = getDataBaseFB();
-  //   set(ref(db, 'users/' + userId), {
-  //     username: name,
-  //     email: email,
-  //   });
-  // }
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
       <div className=" text-center">
@@ -57,27 +69,40 @@ export const Reg = () => {
         <div className="text-4xl mb-4 font-bold ">
           Регистарция в Sirius Future
         </div>
+        {valueBoolean && <div className="text-redColor mb-4">{error}</div>}
         <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={(e) =>
+              setUserDataRegister({
+                ...userDataRegister,
+                email: e.target.value,
+              })
+            }
+            value={userDataRegister.email}
             type="email"
-            required
             placeholder="Эл. почта"
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3"
           />
           <input
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={userDataRegister.password}
+            onChange={(e) =>
+              setUserDataRegister({
+                ...userDataRegister,
+                password: e.target.value,
+              })
+            }
             type="password"
             placeholder="Пароль"
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3  "
           />
           <input
-            value={repeatPassword}
-            onChange={(e) => setRepeatPassword(e.target.value)}
-            required
+            value={userDataRegister.repeatPassword}
+            onChange={(e) =>
+              setUserDataRegister({
+                ...userDataRegister,
+                repeatPassword: e.target.value,
+              })
+            }
             type="password"
             placeholder="Пароль ещё раз"
             className=" border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3 mb-8 "

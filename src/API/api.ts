@@ -6,7 +6,7 @@ import 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { endSession, startSession } from '../session';
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { getDatabase, onValue, push, ref, set } from 'firebase/database';
 
 
 
@@ -52,6 +52,9 @@ export const  authFB = getAuth(app);
 	await  createUserWithEmailAndPassword(authFB, email, password).then(registerResponse=>{
 		startSession(registerResponse.user);
 		signInUserAPI(email, password);
+
+    writeUserDataAPI(email, registerResponse.user.uid);
+    return registerResponse.user.uid
   }).catch(error=>{
     throw error;
   });
@@ -65,16 +68,29 @@ export const signInUserAPI = async (email:string, password:string) => {
 	 });
 };
 // выйти из приложения
-export const  singOutFB = async () => {await signOut(authFB).then(()=>endSession()).catch(error=>{
+export const  singOutAPI = async () => {await signOut(authFB).then(()=>endSession()).catch(error=>{
   throw error;
  });}
+
+
  // Инициализируйте базу данных Firebase с предоставленной конфигурацией
-export const getDataBaseFB = ()=>  getDatabase(app)
+export const dataBaseFB =  getDatabase(app)
  // Ссылка на конкретную коллекцию в базе данных
 export const getRefFB = (database:any,name:string)=> ref(database,name)
 // дотсаем данные по ссылке getRefFB
 export const getValueFB = (collectionRef:any,callBack:any)=> onValue(collectionRef,callBack)
 
+// добаляем пользователя в базу данных
 
 
-
+ export function writeUserDataAPI(email:string,  userId:string) {
+debugger
+    set(ref(dataBaseFB, 'users/' + userId), {
+      email: email,
+    })
+  //   const postListRef = ref(getDataBaseFB(), 'users');
+  //   const newPostRef = push(postListRef);
+  // set(newPostRef, {
+  // email,
+  // });
+  }

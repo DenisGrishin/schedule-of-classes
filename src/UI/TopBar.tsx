@@ -8,7 +8,7 @@ import { endSession } from './../session';
 import Ava from '../img/avatar.png';
 
 import { isLogOut } from '../store/slice/authSlice';
-import { singOutFB } from '../API/api';
+import { singOutAPI } from '../API/api';
 
 export const TopBar = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const TopBar = () => {
   });
 
   const onLogout = () => {
-    singOutFB()
+    singOutAPI()
       .then(() => {
         navigate('/login');
         dispatch(isLogOut());

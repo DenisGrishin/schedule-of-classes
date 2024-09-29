@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react';
-import { getDataBaseFB, getRefFB, getValueFB } from '../API/api';
+import { authFB, dataBaseFB, getRefFB, getValueFB } from '../API/api';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { getUserUID } from '../store/slice/authSlice';
 
 export const Home = () => {
   const [data, setData] = useState();
+  const dispatch = useAppDispatch();
+  const userUID = useAppSelector((state) => {
+    return state.authR.userUID;
+  });
 
   useEffect(() => {
     // Инициализируйте базу данных Firebase с предоставленной конфигурацией
-    const database = getDataBaseFB();
-
+    onAuthStateChanged(authFB, (user) => {
+      if (user) {
+        const uid = user.uid;
+        dispatch(getUserUID(uid));
+      } else {
+        console.log('нет юзера');
+      }
+    });
     // Ссылка на конкретную коллекцию в базе данных
-    const collectionRef = getRefFB(database, 'your_collection');
+    const collectionRef = getRefFB(dataBaseFB, 'users/' + userUID);
 
     // Функция для извлечения данных из базы данных
 

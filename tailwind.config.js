@@ -12,7 +12,7 @@ export default {
         textMain: '#323854',
         green: '#D7F0D6',
         greenBorder: '#BBE7B9',
-        red: '#E12828',
+        redColor: '#E12828',
         blue: '#008AFF',
         borderPurple: '#7362BC',
       },
