@@ -1,87 +1,52 @@
-import React, { useState } from 'react';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
 import { GridFlex } from '../UI/GridFlex';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../hooks/hooks';
+
 import { EventFor } from '../otherFunction/otherFunction';
-import { isLogin } from '../store/slice/authSlice';
-import { signInUserAPI } from '../API/api';
-import { useBoolean } from '../hooks/useBoolean';
+
 import { Preloader } from '../UI/Preloader';
-import { toggleIsPreloader } from '../store/slice/commonSlice';
 
-export const Login = () => {
-  const navigate = useNavigate();
+interface propLogin {
+  objLoginProp: {
+    onSubmit: (e: EventFor<'form', 'onSubmit'>) => void;
+    userDataLogin: { email: string; password: string };
+    valueBoolean: boolean;
+    setUserEmailValue: (value: string) => void;
+    setUserPasswordValue: (value: string) => void;
 
-  const dispatch = useAppDispatch();
-  const { value: valueBoolean, setTrue, setFalse } = useBoolean();
-  const [error, setError] = useState('');
-
-  const [userDataRegister, setUserDataRegister] = useState({
-    email: '',
-    password: '',
-  });
-
-  const onSubmit = async (event: EventFor<'form', 'onSubmit'>) => {
-    event.preventDefault();
-
-    // validate the inputs
-    if (!userDataRegister.email || !userDataRegister.password) {
-      setError('Пожалуйста, введите свое имя пользователя и пароль.');
-      setTrue();
-      return;
-    }
-
-    // clear the errors
-    setError('');
-    dispatch(toggleIsPreloader(true));
-    signInUserAPI(userDataRegister.email, userDataRegister.password)
-      .then(() => {
-        setError('');
-        setFalse();
-        navigate('/home');
-        dispatch(isLogin());
-        dispatch(toggleIsPreloader(false));
-      })
-      .catch((error) => {
-        setTrue();
-        setError('Имя пользователя или пароль введены неверно');
-        console.error(error.message);
-        dispatch(toggleIsPreloader(false));
-      });
-
-    // TODO: send the login request
-    console.log('Logging in...');
+    errorMessage: string;
+    navigateProp: () => void;
   };
-
+}
+export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
+  const {
+    onSubmit,
+    userDataLogin,
+    valueBoolean,
+    setUserEmailValue,
+    setUserPasswordValue,
+    errorMessage,
+    navigateProp,
+  } = objLoginProp;
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
       <Preloader />
       <div className=" text-center">
         <LogoNoText className="w-full mb-8" />
         <div className="text-4xl mb-4 font-bold">Вход в Sirius Future</div>
-        {valueBoolean && <div className="text-redColor mb-4">{error}</div>}
+        {valueBoolean && (
+          <div className="text-redColor mb-4">{errorMessage}</div>
+        )}
         <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
-            value={userDataRegister.email}
-            onChange={(e) =>
-              setUserDataRegister({
-                ...userDataRegister,
-                email: e.target.value,
-              })
-            }
+            value={userDataLogin.email}
+            onChange={(e) => setUserEmailValue(e.target.value)}
             type="email"
             placeholder="Эл. почта"
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3"
           />
           <input
-            value={userDataRegister.password}
-            onChange={(e) =>
-              setUserDataRegister({
-                ...userDataRegister,
-                password: e.target.value,
-              })
-            }
+            value={userDataLogin.password}
+            onChange={(e) => setUserPasswordValue(e.target.value)}
             type="password"
             placeholder="Пароль"
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3 mb-8 "
@@ -96,7 +61,7 @@ export const Login = () => {
         <button
           className="text-blue"
           type="button"
-          onClick={() => navigate('/reg')}
+          onClick={() => navigateProp()}
         >
           Регестрация
         </button>

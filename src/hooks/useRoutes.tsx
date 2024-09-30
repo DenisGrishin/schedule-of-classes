@@ -1,18 +1,17 @@
-import { Login } from '../page/Login';
 import { Home } from '../page/Home';
 import { Route, Routes } from 'react-router-dom';
-import { Main } from '../UI/Main';
 import { Schedule } from './../page/Schedule';
-import { Reg } from '../page/Reg';
 import { PrivateRoute } from '../componets/PrivateRoute';
+import { ContainerLogin } from './../componets/ContainerLogin';
+import { ContainerReg } from '../componets/ContainerReg';
 
 export const useRoutes = () => {
   return (
     <Routes>
-      <Route index element={<Login />} />
+      <Route index element={<ContainerLogin />} />
       {/* <Route path="/" element={<Main />} /> */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/reg" element={<Reg />} />
+      <Route path="/login" element={<ContainerLogin />} />
+      <Route path="/reg" element={<ContainerReg />} />
 
       <Route element={<PrivateRoute />}>
         <Route path="/home" element={<Home />} />
