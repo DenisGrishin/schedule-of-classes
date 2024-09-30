@@ -7,6 +7,8 @@ import { EventFor } from '../otherFunction/otherFunction';
 import { isLogin } from '../store/slice/authSlice';
 import { signInUserAPI } from '../API/api';
 import { useBoolean } from '../hooks/useBoolean';
+import { Preloader } from '../UI/Preloader';
+import { toggleIsPreloader } from '../store/slice/commonSlice';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -32,18 +34,20 @@ export const Login = () => {
 
     // clear the errors
     setError('');
-
+    dispatch(toggleIsPreloader(true));
     signInUserAPI(userDataRegister.email, userDataRegister.password)
       .then(() => {
         setError('');
         setFalse();
         navigate('/home');
         dispatch(isLogin());
+        dispatch(toggleIsPreloader(false));
       })
       .catch((error) => {
         setTrue();
         setError('Имя пользователя или пароль введены неверно');
         console.error(error.message);
+        dispatch(toggleIsPreloader(false));
       });
 
     // TODO: send the login request
@@ -52,6 +56,7 @@ export const Login = () => {
 
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
+      <Preloader />
       <div className=" text-center">
         <LogoNoText className="w-full mb-8" />
         <div className="text-4xl mb-4 font-bold">Вход в Sirius Future</div>

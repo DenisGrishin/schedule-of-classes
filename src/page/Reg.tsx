@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { EventFor } from '../otherFunction/otherFunction';
 import { useAppDispatch } from '../hooks/hooks';
 import { isLogin } from '../store/slice/authSlice';
-import { createUserAPI, writeUserDataAPI } from '../API/api';
+import { createUserAPI } from '../API/api';
 import { useBoolean } from '../hooks/useBoolean';
+import { toggleIsPreloader } from '../store/slice/commonSlice';
+import { Preloader } from '../UI/Preloader';
 
 export const Reg = () => {
   const dispatch = useAppDispatch();
@@ -45,13 +47,14 @@ export const Reg = () => {
       });
       return;
     }
-
+    dispatch(toggleIsPreloader(true));
     createUserAPI(userDataRegister.email, userDataRegister.password)
       .then(() => {
         setError('');
         setFalse();
         navigate('/home');
         dispatch(isLogin());
+        dispatch(toggleIsPreloader(false));
       })
       .catch((error) => {
         setTrue();
@@ -59,11 +62,13 @@ export const Reg = () => {
         if ('Firebase: Error (auth/email-already-in-use).' === error.message) {
           setError('Этот адрес электронной почты уже используется');
         }
+        dispatch(toggleIsPreloader(false));
       });
   };
 
   return (
     <GridFlex alignItems="items-center" justifyContent="justify-center">
+      <Preloader />
       <div className=" text-center">
         <LogoNoText className="w-full mb-8" />
         <div className="text-4xl mb-4 font-bold ">
