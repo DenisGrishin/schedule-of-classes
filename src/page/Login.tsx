@@ -14,7 +14,7 @@ interface propLogin {
     setUserPasswordValue: (value: string) => void;
 
     errorMessage: string;
-    navigateProp: () => void;
+    navigateProp: (path: string) => void;
   };
 }
 export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
@@ -38,6 +38,7 @@ export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
         )}
         <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
+            required
             value={userDataLogin.email}
             onChange={(e) => setUserEmailValue(e.target.value)}
             type="email"
@@ -45,6 +46,7 @@ export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3"
           />
           <input
+            required
             value={userDataLogin.password}
             onChange={(e) => setUserPasswordValue(e.target.value)}
             type="password"
@@ -58,13 +60,26 @@ export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
             Войти
           </button>
         </form>
-        <button
-          className="text-blue"
-          type="button"
-          onClick={() => navigateProp()}
+        <GridFlex
+          styleList="gap-5"
+          justifyContent="justify-center"
+          alignItems="items-center"
         >
-          Регестрация
-        </button>
+          <button
+            className="text-blue"
+            type="button"
+            onClick={() => navigateProp('reg')}
+          >
+            Регестрация
+          </button>
+          <button
+            onClick={() => navigateProp('password')}
+            className="text-blue  "
+            type="button"
+          >
+            Забыли пароль?
+          </button>
+        </GridFlex>
       </div>
     </GridFlex>
   );

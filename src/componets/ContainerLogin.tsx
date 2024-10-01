@@ -61,7 +61,7 @@ export const ContainerLogin = () => {
     setUserPasswordValue: (passwordValue: string) =>
       setUserDataLogin({ ...userDataLogin, password: passwordValue }),
     errorMessage: error,
-    navigateProp: () => navigate('/reg'),
+    navigateProp: (path: string) => navigate(path),
   };
 
   return <Login objLoginProp={objLoginProp} />;

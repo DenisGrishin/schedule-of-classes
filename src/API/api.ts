@@ -4,9 +4,9 @@ import 'firebase/firestore';
 import 'firebase/database';
 import 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { endSession, startSession } from '../session';
-import { getDatabase, onValue, push, ref, set } from 'firebase/database';
+import { Database, getDatabase, onValue, ref, set } from 'firebase/database';
 
 
 
@@ -24,24 +24,6 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 // получить данные аутентификации
 export const  authFB = getAuth(app);
-
-
-// export  const  writeUserData =(userId:string, name:string, email:string)=> {
-// 	const db = getDataBaseFB();
-// 	set(ref(db, 'users/' + userId), {
-// 	  username: name,
-// 	  email: email,
-// 	});
-//  }
-
-
-//  export const registrationUser = async (email:string, password:string)=>{
-// 	const registerResponse =  await createUser(email, password)
-// 	startSession(registerResponse.user);
-// 	 signInUser(email, password);
-//  }
-
-
 
 
 
@@ -72,25 +54,26 @@ export const  singOutAPI = async () => {await signOut(authFB).then(()=>endSessio
   throw error;
  });}
 
+// сброс пароля 
+export const resetPasswordAPI = async (email:string)=> await sendPasswordResetEmail(authFB,email)
+
+
 
  // Инициализируйте базу данных Firebase с предоставленной конфигурацией
 export const dataBaseFB =  getDatabase(app)
  // Ссылка на конкретную коллекцию в базе данных
-export const getRefFB = (database:any,name:string)=> ref(database,name)
+export const getRefFB = (database:Database,name:string)=> ref(database,name)
 // дотсаем данные по ссылке getRefFB
-export const getValueFB = (collectionRef:any,callBack:any)=> onValue(collectionRef,callBack)
+export const getValueFB = (collectionRef:any,callBack:()=>unknown)=> onValue(collectionRef,callBack)
 
 // добаляем пользователя в базу данных
-
-
- export function writeUserDataAPI(email:string,  userId:string) {
-debugger
+export function writeUserDataAPI(email:string,  userId:string) {
     set(ref(dataBaseFB, 'users/' + userId), {
       email: email,
     })
-  //   const postListRef = ref(getDataBaseFB(), 'users');
-  //   const newPostRef = push(postListRef);
-  // set(newPostRef, {
-  // email,
-  // });
+
+    set(ref(dataBaseFB, 'emails/'+ '1' ), {value:email})
+
   }
+
+  // 

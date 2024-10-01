@@ -40,6 +40,7 @@ export const Reg: React.FC<propReg> = ({ objLoginProp }) => {
         )}
         <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
+            required
             onChange={(e) => setEmailUserDataRegister(e.target.value)}
             value={userDataRegister.email}
             type="email"
@@ -47,6 +48,7 @@ export const Reg: React.FC<propReg> = ({ objLoginProp }) => {
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3"
           />
           <input
+            required
             value={userDataRegister.password}
             onChange={(e) => setPasswordUserDataRegister(e.target.value)}
             type="password"
@@ -54,6 +56,7 @@ export const Reg: React.FC<propReg> = ({ objLoginProp }) => {
             className="mb-3 border border-solid border-[#ECECEC] rounded-lg py-2.5 px-3  "
           />
           <input
+            required
             value={userDataRegister.repeatPassword}
             onChange={(e) => setRepeatPasswordUserDataRegister(e.target.value)}
             type="password"
