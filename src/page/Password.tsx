@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { GridFlex } from '../UI/GridFlex';
 import { Preloader } from '../UI/Preloader';
 import LogoNoText from '../img/icon/logo-icon-no-text.svg?react';
-import { useBoolean } from '../hooks/useBoolean';
 import { useNavigate } from 'react-router-dom';
-import { resetPasswordAPI } from '../API/api';
+import { getDataBaseFbAPI, resetPasswordAPI } from '../API/api';
 import { EventFor } from '../otherFunction/otherFunction';
 
 export const Password = () => {
-  const { value: valueBoolean, setTrue, setFalse } = useBoolean();
   const [userEmail, setUserEmail] = useState('');
   const [messagePromise, setMessagePromise] = useState({
     error: '',
@@ -17,26 +15,38 @@ export const Password = () => {
   const navigate = useNavigate();
   const onSubmit = async (e: EventFor<'form', 'onSubmit'>) => {
     e.preventDefault();
-    setFalse();
     setMessagePromise({
       error: '',
       access: '',
     });
-    await resetPasswordAPI(userEmail)
-      .then(() => {
-        setTrue();
-        setMessagePromise({
-          error: '',
-          access: 'Ссылка для сброса пароля отправлена на ваш Email.',
-        });
+
+    await getDataBaseFbAPI('users/')
+      .then((res) => {
+        if (res) {
+          const arrEmail = Object.values(res).map((it: unknown) => {
+            return it.email;
+          });
+
+          if (arrEmail.includes(userEmail)) {
+            setMessagePromise({
+              error: '',
+              access: 'Ссылка для сброса пароля отправлена на ваш Email.',
+            });
+          }
+        }
       })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await resetPasswordAPI(userEmail)
+      .then(() => {})
       .catch((error) => {
-        debugger;
         setMessagePromise({
           error: 'Пожалуйста, введите действующий Email-адрес.',
           access: '',
         });
-        setTrue();
+        console.log(error.message);
       });
   };
 
@@ -50,13 +60,18 @@ export const Password = () => {
           Чтобы задать новый пароль, введите Email-адрес
           <br /> своего аккаунта Sirius Future.
         </p>
-        {valueBoolean && (
-          <div className="text-redColor mb-4">
-            {messagePromise.error === ''
-              ? messagePromise.access
-              : messagePromise.error}
-          </div>
-        )}
+        {messagePromise.error ||
+          (messagePromise.access && (
+            <div
+              className={`${
+                messagePromise.error ? 'text-redColor' : 'text-green'
+              } mb-4`}
+            >
+              {messagePromise.error
+                ? messagePromise.error
+                : messagePromise.access}
+            </div>
+          ))}
         <form onSubmit={onSubmit} className="flex flex-col mb-4">
           <input
             required

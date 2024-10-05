@@ -44,7 +44,7 @@ export const ContainerLogin = () => {
       .catch((error) => {
         setTrue();
         setError('Имя пользователя или пароль введены неверно');
-        console.error(error.message);
+
         dispatch(toggleIsPreloader(false));
       });
 

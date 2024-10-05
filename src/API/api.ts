@@ -6,7 +6,7 @@ import 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { endSession, startSession } from '../session';
-import { Database, getDatabase, onValue, ref, set } from 'firebase/database';
+import {  child, DataSnapshot, get, getDatabase, onValue, ref, set } from 'firebase/database';
 
 
 
@@ -61,19 +61,29 @@ export const resetPasswordAPI = async (email:string)=> await sendPasswordResetEm
 
  // Инициализируйте базу данных Firebase с предоставленной конфигурацией
 export const dataBaseFB =  getDatabase(app)
- // Ссылка на конкретную коллекцию в базе данных
-export const getRefFB = (database:Database,name:string)=> ref(database,name)
-// дотсаем данные по ссылке getRefFB
-export const getValueFB = (collectionRef:any,callBack:()=>unknown)=> onValue(collectionRef,callBack)
+
+// слушатель для FB, достаем данные с базы и постояно обновляем, в корне не использвать 
+export const getOnValueDataFbAPI = (namePath:string,callBack: (snapshot: DataSnapshot) =>void)=> {
+  onValue(ref(dataBaseFB,namePath),(snapshot: DataSnapshot)=>callBack(snapshot))
+}
+
+// берем данные с FB один раз
+export const getDataBaseFbAPI =  (namePath:string)=>{
+ return get(child(ref(dataBaseFB),namePath)).then((snapshot: DataSnapshot)=>{
+    // snapshot.exists() если что есть то возраешт true, если нет то false
+    if (snapshot.exists()) {
+      return snapshot.val()
+    } else {
+      console.log("No data available");
+    }
+  }).catch((err)=> {throw err})
+} 
+
 
 // добаляем пользователя в базу данных
 export function writeUserDataAPI(email:string,  userId:string) {
     set(ref(dataBaseFB, 'users/' + userId), {
       email: email,
     })
-
-    set(ref(dataBaseFB, 'emails/'+ '1' ), {value:email})
-
   }
 
-  // 

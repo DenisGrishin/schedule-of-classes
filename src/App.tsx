@@ -1,5 +1,4 @@
 import './App.css';
-import { getDataBaseFB, getRefFB, getValueFB } from './firebase';
 import { useRoutes } from './hooks/useRoutes';
 
 function App() {

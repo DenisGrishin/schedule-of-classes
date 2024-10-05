@@ -10,7 +10,7 @@ export default {
         whiteMain: '#FDFDFF',
         textSidebar: '#434B74',
         textMain: '#323854',
-        green: '#D7F0D6',
+        green: '#38c21f',
         greenBorder: '#BBE7B9',
         redColor: '#E12828',
         blue: '#008AFF',
