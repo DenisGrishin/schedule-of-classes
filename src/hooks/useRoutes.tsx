@@ -15,8 +15,7 @@ export const useRoutes = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/schedule" element={<Schedule />} />
       </Route>
-      <Route path="/login" element={<ContainerLogin />}>
-        {/* <Route path="/login" /> */}
+      <Route path="/login">
         <Route index element={<ContainerLogin />} />
         <Route path="password" element={<ContainerPassword />} />
         <Route path="reg" element={<ContainerReg />} />

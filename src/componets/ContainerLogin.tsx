@@ -3,7 +3,7 @@ import { Login } from '../page/Login';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../hooks/hooks';
 import { useBoolean } from '../hooks/useBoolean';
-import { EventFor } from '../otherFunction/otherFunction';
+import { EventFor } from '../typeTS/otherFunction';
 import { toggleIsPreloader } from '../store/slice/commonSlice';
 import { signInUserAPI } from '../API/api';
 import { isLogin } from '../store/slice/authSlice';
@@ -44,7 +44,7 @@ export const ContainerLogin = () => {
       .catch((error) => {
         setTrue();
         setError('Имя пользователя или пароль введены неверно');
-
+        console.log(error.message);
         dispatch(toggleIsPreloader(false));
       });
 

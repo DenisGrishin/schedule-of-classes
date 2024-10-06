@@ -13,7 +13,9 @@ export const GridFlex: React.FC<propGridFlex> = ({
   styleList,
 }) => {
   return (
-    <div className={`flex  ${styleList} ${justifyContent} ${alignItems}`}>
+    <div
+      className={`flex h-full  ${styleList} ${justifyContent} ${alignItems}`}
+    >
       {children}
     </div>
   );

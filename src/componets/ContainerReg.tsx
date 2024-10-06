@@ -3,7 +3,7 @@ import { Reg } from './../page/Reg';
 import { useAppDispatch } from '../hooks/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useBoolean } from '../hooks/useBoolean';
-import { EventFor } from '../otherFunction/otherFunction';
+import { EventFor } from '../typeTS/otherFunction';
 import { toggleIsPreloader } from '../store/slice/commonSlice';
 import { createUserAPI } from '../API/api';
 import { isLogin } from '../store/slice/authSlice';

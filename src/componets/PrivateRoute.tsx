@@ -8,7 +8,7 @@ export const PrivateRoute = () => {
   const [isAuthenticated, tokenAuth] = useAuth();
 
   const location = useLocation();
-  return tokenAuth.accessToken !== null && isAuthenticated ? (
+  return tokenAuth !== null && isAuthenticated ? (
     <GridFlex>
       <SideBar />
       <div>

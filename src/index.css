@@ -1,8 +1,15 @@
-@import url(https://fonts.googleapis.com/css?family=Fira+Sans:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Circe Rounded';
+  src: url('../src/fotns/CirceRounded-Regular4.woff2') format('woff2'),
+    url('../src/fotns/CirceRounded-Regular4.woff') format('woff');
+
+  font-weight: 400;
+  font-style: normal;
+}
 
 html,
 body,
@@ -10,10 +17,23 @@ body,
   height: 100%;
 }
 body {
-  font-family: 'Fira Sans';
+  font-family: 'Circe Rounded';
+
   background-color: #fdfdff;
   @apply text-textMain;
 }
 * {
   box-sizing: content-box;
+}
+
+@media (min-width: 359.98px) {
+  body {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+}
+@media (min-width: 1023.98px) {
+  body {
+    font-size: 16px;
+  }
 }
