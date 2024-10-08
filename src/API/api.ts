@@ -44,6 +44,7 @@ export const  authFB = getAuth(app);
 // Вход в приложения
 export const signInUserAPI = async (email:string, password:string) => {
   await  signInWithEmailAndPassword(authFB, email, password).then((loginResponse)=>{
+
     startSession(loginResponse.user);
   }).catch(error=>{
 		throw error;

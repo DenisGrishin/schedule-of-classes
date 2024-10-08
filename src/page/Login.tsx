@@ -57,8 +57,20 @@ export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
               onChange={(e) => setUserPasswordValue(e.target.value)}
               typeInpt="password"
               placeholderInpt="Пароль"
-              otherStyle="mb-8"
+              otherStyle="mb-4"
             />
+            <div className="checkbox mb-8">
+              <input
+                id="c_1"
+                className="checkbox__input"
+                type="checkbox"
+                value=""
+              />
+              <label htmlFor="c_1" className="checkbox__label">
+                <span className="checkbox__text">Запомнить меня</span>
+              </label>
+            </div>
+
             <Button typeBtn="submit">Войти</Button>
           </form>
           <GridFlex
@@ -78,7 +90,7 @@ export const Login: React.FC<propLogin> = ({ objLoginProp }) => {
               className="text-blue  "
               type="button"
             >
-              Забыли пароль?
+              Я забыл пароль
             </button>
           </GridFlex>
         </div>

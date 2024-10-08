@@ -4,3 +4,48 @@
 .active-fill path {
   fill: #fff;
 }
+.checkbox {
+  display: flex;
+  align-items: center;
+}
+.checkbox__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.checkbox__input:checked + .checkbox__label:after {
+  background: #8d7fc7;
+}
+.checkbox__label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  gap: 10px;
+  user-select: none;
+}
+
+.checkbox__label:before {
+  content: '';
+  align-self: flex-start;
+  flex: 0 0 24px;
+  width: 24px;
+  border-radius: 4px;
+  height: 24px;
+  border: 1px solid #c8c5cd;
+}
+.checkbox__label::after {
+  content: '';
+  flex: 0 0 16px;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  border-radius: 4px;
+  transition: all 0.3s ease 0s;
+}
+.checkbox__text {
+}

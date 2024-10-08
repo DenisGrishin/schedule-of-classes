@@ -5,14 +5,16 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
 interface AuthState {
-  isAuth: boolean
-  userUID:string
+  isAuth: boolean;
+  userUID:string;
+  isRemember:boolean;
 } 
 
 // Define the initial state using that type
 const initialState: AuthState = {
   isAuth: false,
   userUID:'',
+  isRemember:false,
 } satisfies AuthState as AuthState
 
 export const authSlice = createSlice({
@@ -28,13 +30,15 @@ export const authSlice = createSlice({
     },
     getUserUID:(state,action)=>{
       state.userUID = action.payload
+    },
+    gerIsRemember:(state,action)=>{
+      state.isRemember = action.payload
+
     }
   },
 })
 
-export const { isLogin,isLogOut,getUserUID } = authSlice.actions
+export const { isLogin,isLogOut,getUserUID ,gerIsRemember} = authSlice.actions
 
-// Other code such as selectors can use the imported `RootState` type
-// export const selectCount = (state: RootState) => state.authR.value
 
 export default authSlice.reducer
